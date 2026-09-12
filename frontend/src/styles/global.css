@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  /* base — "asfalto à noite": app usado na rua, precisa de contraste ao sol e à noite */
+  --bg: #101820;
+  --surface: #1B2530;
+  --surface-raised: #22303D;
+  --border: #2C3A47;
+
+  --text: #EEF2F5;
+  --text-muted: #8FA0AE;
+
+  /* vaga livre = verde-sinal; vaga sumindo = âmbar; ocupada = vermelho — mapeamento
+     que já é intuitivo de trânsito/sinalização, não é decoração arbitrária */
+  --available: #2ED9A8;
+  --available-dim: rgba(46, 217, 168, 0.16);
+  --warning: #F5A623;
+  --danger: #EF5350;
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* trava o app em tela cheia — sem isso, qualquer
+    elemento um pixel mais alto que a viewport (ex: 100vh em navegador
+    com barra de endereço dinâmica) deixa a página rolar e mostra o fundo
+    escuro do body por baixo do app, como uma "faixa preta" ao rolar. */
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--available);
+  outline-offset: 2px;
+}
+
+input {
+  font-family: inherit;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 16px; /* evita zoom automático no iOS */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
