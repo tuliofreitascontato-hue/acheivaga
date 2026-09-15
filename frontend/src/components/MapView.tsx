@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
+import { Circle, MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { ParkingSpot } from '../types';
 
@@ -74,11 +74,12 @@ function RecenterButton({ lat, lng }: { lat: number; lng: number }) {
 
 interface Props {
   center: { lat: number; lng: number };
+  accuracy?: number | null;
   spots: ParkingSpot[];
   onSelectSpot: (spot: ParkingSpot) => void;
 }
 
-export function MapView({ center, spots, onSelectSpot }: Props) {
+export function MapView({ center, accuracy, spots, onSelectSpot }: Props) {
   return (
     <MapContainer
       center={[center.lat, center.lng]}
@@ -92,6 +93,15 @@ export function MapView({ center, spots, onSelectSpot }: Props) {
       />
       <InitialRecenter lat={center.lat} lng={center.lng} />
       <RecenterButton lat={center.lat} lng={center.lng} />
+      {/* raio de incerteza do GPS — deixa visível pro usuário por que o
+          botão de reportar às vezes fica desabilitado */}
+      {accuracy != null && (
+        <Circle
+          center={[center.lat, center.lng]}
+          radius={accuracy}
+          pathOptions={{ color: '#4E9BFF', fillColor: '#4E9BFF', fillOpacity: 0.08, weight: 1 }}
+        />
+      )}
       <Marker position={[center.lat, center.lng]} icon={meIcon} />
       {spots.map((spot) => (
         <Marker

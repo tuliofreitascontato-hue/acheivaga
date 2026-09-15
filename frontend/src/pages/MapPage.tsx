@@ -11,14 +11,14 @@ import { ParkingSpot } from '../types';
 
 export function MapPage() {
   const { user, logout } = useAuth();
-  const { position, error: geoError } = useGeolocation();
+  const { position, accuracy, isPrecise, error: geoError } = useGeolocation();
   const { spots, refresh } = useNearbySpots(position?.lat ?? null, position?.lng ?? null);
   const [reporting, setReporting] = useState(false);
   const [busySpotId, setBusySpotId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
 
   async function handleReport() {
-    if (!position) return;
+    if (!position || !isPrecise) return;
     setReporting(true);
     setFeedback(null);
     try {
@@ -89,7 +89,7 @@ export function MapPage() {
         </button>
       </div>
 
-      <MapView center={position} spots={spots} onSelectSpot={() => {}} />
+      <MapView center={position} accuracy={accuracy} spots={spots} onSelectSpot={() => {}} />
 
       {feedback && (
         <div
@@ -109,7 +109,16 @@ export function MapPage() {
         </div>
       )}
 
-      <ReportButton onClick={handleReport} loading={reporting} />
+      <ReportButton
+        onClick={handleReport}
+        loading={reporting}
+        disabled={!isPrecise}
+        disabledReason={
+          !isPrecise
+            ? `Aguardando GPS mais preciso (±${accuracy ? Math.round(accuracy) : '?'}m) — fique parado uns segundos`
+            : undefined
+        }
+      />
 
       <BottomSheet title={`${spots.length} vaga(s) por perto`}>
         {spots.length === 0 && (
