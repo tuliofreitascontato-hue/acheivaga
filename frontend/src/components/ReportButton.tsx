@@ -1,18 +1,15 @@
 interface Props {
   onClick: () => void;
   loading: boolean;
-  disabled?: boolean;
-  disabledReason?: string;
+  warning?: string;
 }
 
-export function ReportButton({ onClick, loading, disabled, disabledReason }: Props) {
-  const isDisabled = loading || !!disabled;
+export function ReportButton({ onClick, loading, warning }: Props) {
   return (
     <>
       <button
         onClick={onClick}
-        disabled={isDisabled}
-        aria-disabled={isDisabled}
+        disabled={loading}
         style={{
           position: 'absolute',
           right: 16,
@@ -26,13 +23,13 @@ export function ReportButton({ onClick, loading, disabled, disabledReason }: Pro
           padding: '14px 20px',
           borderRadius: 999,
           boxShadow: '0 6px 18px rgba(46, 217, 168, 0.35)',
-          opacity: isDisabled ? 0.5 : 1,
-          cursor: isDisabled ? 'not-allowed' : 'pointer',
+          opacity: loading ? 0.7 : 1,
         }}
       >
         {loading ? 'Reportando…' : '🅿️ Reportar vaga aqui'}
       </button>
-      {disabled && disabledReason && (
+      {/* avisa, mas não trava — a precisão ruim vira aviso, o usuário decide */}
+      {warning && !loading && (
         <div
           role="status"
           style={{
@@ -50,7 +47,7 @@ export function ReportButton({ onClick, loading, disabled, disabledReason }: Pro
             borderRadius: 'var(--radius-sm, 8px)',
           }}
         >
-          {disabledReason}
+          {warning}
         </div>
       )}
     </>

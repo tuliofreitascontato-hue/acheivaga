@@ -18,7 +18,7 @@ export function MapPage() {
   const [feedback, setFeedback] = useState<string | null>(null);
 
   async function handleReport() {
-    if (!position || !isPrecise) return;
+    if (!position) return;
     setReporting(true);
     setFeedback(null);
     try {
@@ -112,10 +112,9 @@ export function MapPage() {
       <ReportButton
         onClick={handleReport}
         loading={reporting}
-        disabled={!isPrecise}
-        disabledReason={
+        warning={
           !isPrecise
-            ? `Aguardando GPS mais preciso (±${accuracy ? Math.round(accuracy) : '?'}m) — fique parado uns segundos`
+            ? `GPS impreciso agora (±${accuracy ? Math.round(accuracy) : '?'}m) — reportar mesmo assim pode marcar o pino no lugar errado`
             : undefined
         }
       />
